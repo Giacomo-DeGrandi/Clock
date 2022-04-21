@@ -146,9 +146,17 @@ document.addEventListener('DOMContentLoaded', function(){
         (s.toString().length < 2) ? s = '0' + s.toString() : s = s.toString();
         tSec.innerHTML = s
     }
+
+    // DECLARE my start stop as Global to get in the other function for the stop event
+
+    let clockInt;
+
     function startCount(e){
+
         function countNow(){
+
             start.style.pointerEvents = "none";
+
             let date = new Date()
             let year = date.getFullYear()
             let month = date.getMonth()
@@ -189,18 +197,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
         }
 
-        let clockInt = setInterval(countNow, 1000);
-
+        clockInt = setInterval(countNow, 1000);
     }
 
-    function stopCount(){
-
+    function stopCount(e){
+        start.style.pointerEvents = "auto";
+        clearInterval(clockInt);
     }
-
-    function resetCount(){
-
-    }
-
 
 })
 

@@ -14,6 +14,7 @@
             crossorigin="anonymous"></script>
     <script src="clock.js"></script>
     <script async src="timer.js"></script>
+    <script async src="chrono.js"></script>
     <title>CLOCK</title>
 </head>
 <body>
@@ -23,10 +24,12 @@
     <div class="container-fluid">
         <div class="d-flex flex-column align-items-center justify-content-center">
 
+
             <div class="display-1 bg-light p-1 w-75 shadow-sm text-center mt-3">Current Time</div>
 
             <div id="clock" class="display-1 py-5 bg-light fw-bold shadow-sm w-75 text-center mb-2 mt-4">
             </div>
+
 
             <div class="display-1 bg-light p-1 w-75 shadow-sm text-center mt-3">Timer</div>
 
@@ -88,29 +91,41 @@
                     </tr>
                 </table>
 
+
             <div class="display-1 bg-light p-1 w-75 shadow-sm text-center mt-3">Chrono</div>
 
             <div id="chrono">
-                <table>
-                    <tr>
-                        <td class="h3">
-                            time
-                        </td>
+                div
+                <table class="text-center text-nowrap bg-light shadow-sm w-75 mt-2">
+                    <tr class="d-flex flex-row display-1 p-5">
+                        <th class="col border border-light shadow-sm p-2">
+                            <h1>hour</h1>
+                            <p id="cHou">00</p>
+                        </th>
+                        <th class="col border border-light shadow-sm p-2">
+                            <h1>min</h1>
+                            <p id="cMin">00</p>
+                        </th>
+                        <th class="col border border-light shadow-sm p-2">
+                            <h1>sec</h1>
+                            <p id="cSec">00</p>
+                        </th>
                     </tr>
-                    <tr>
-                        <td class="h3">
-                            <div class="d-flex w-50 shadow-sm bg-light">
-                                <button type="submit" class="btn text-center btn-outline-dark shadow-sm p-3 mt-5" name="startC" value="+1">
-                                    start
+                    <tr class="d-flex flex-row display-1">
+                        <td class="d-flex flex-row align-items-center justify-content-center display-5 w-100 mx-5 p-2">
+                            <div class="d-flex shadow-sm bg-light">
+                                <button type="submit" class="btn text-center btn-outline-dark shadow-sm p-3" name="startStop" value="+1">
+                                    start/stop
                                 </button>
-                                <button type="submit" class="btn text-center btn-outline-dark shadow-sm p-3 mt-5" name="stopC" value="-1">
-                                    stop
+                                <button type="submit" class="btn text-center btn-outline-dark shadow-sm p-3" name="round" value="-1">
+                                    round
                                 </button>
                             </div>
                         </td>
                     </tr>
                 </table>
             </div>
+
 
             <div id="alarm">
             </div>
@@ -121,8 +136,10 @@
 
 </main>
 
-<footer>
-
+<footer class=" p-5">
+    <span class="p-5">
+      <a href="https://github.com/Giacomo-DeGrandi" >my github</a>
+    </span>
 </footer>
 
 </html>
