@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     //get my buttons
     let startStop = document.querySelector("[name=\"startStop\"]")
     let roundC = document.querySelector("[name=\"round\"]")
+    let resetC = document.querySelector("[name=\"reset\"]")
 
     // get round lists
     let roundUl = document.querySelector("#roundList")
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // add events
     startStop.addEventListener( 'click', startStopClick )
     roundC.addEventListener( 'click', roundClick )
+    resetC.addEventListener( 'click', reset )
 
     // get my obj Date, necessary to manage time
     let date = new Date(0,0,0,0,0,0,0)
@@ -31,16 +33,17 @@ document.addEventListener('DOMContentLoaded', function() {
     let sClock = date.getSeconds();
     let msClock = date.getMilliseconds();
 
+
     // scope the caller to global
     let chronoInt;
 
-    // add functions
+
+    // START-STOP _______________________________________________________
     function startStopClick(e){
 
-            // init counter
+        console.log(msClock)
 
-            let count;
-
+        // if the event target (startStop btn) value equal to start
             if(e.target.value === 'start'){
 
                 function myChrono(){
@@ -80,11 +83,40 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.target.value = 'stop'
 
             } else {
-
                 clearInterval(chronoInt)
                 e.target.value = 'start'
+
             }
+        console.log(e.target.value)
     }
+
+    function reset(e){
+
+        date.setHours(0)
+        date.setMinutes(0)
+        date.setSeconds(0)
+        date.setMilliseconds(0)
+
+        hClock=0
+        mClock=0
+        sClock=0
+        msClock=0
+
+        cHou.innerHTML = '0'
+        cMin.innerHTML = '0'
+        cSec.innerHTML = '0'
+        cMsec.innerHTML = '0'
+
+        roundUl.innerHTML = ''
+        timesUl.innerHTML = ''
+
+        clearInterval(chronoInt)
+
+        startStop.value = 'start'
+    }
+
+
+    // ROUND-TIMES _____________________________________________________
 
     // init my roundCounter
     let roundCounter = 0;
@@ -95,11 +127,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function roundClick(e){
 
-        //init roundcounter
+        //init round counter
         roundCounter ++;
 
         let li = document.createElement('li');
-        li.setAttribute('class','p-2 display-6 w-100');
+        li.setAttribute('class','p-2 h3 fw-lighter w-100');
 
         // get my hrs min secs
         let hRound = parseInt(cHou.innerHTML)
@@ -107,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let sRound = parseInt(cSec.innerHTML)
         let msRound = date.getMilliseconds();
 
-        li.innerText = '✅' + 'n.'+ roundCounter + ' ' + '🔁' + ' ' + hRound + ':' + mRound + ':' + sRound + ':' + msRound
+        li.innerText = '✅' + 'n.'+ roundCounter + ' ' + '🔁' + ' ' + hRound + ':' + mRound + ':' + sRound + ':' + msRound + '0'
 
         roundUl.appendChild(li);
 
@@ -141,20 +173,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         let li2 = document.createElement('li');
-        li2.setAttribute('class','p-2 display-6 w-100');
+        li2.setAttribute('class','p-2 h3 fw-lighter w-100');
 
         // first Round is always NaN
         if(roundCounter > 1){
 
             li2.innerText = '⏲️'
                 + Math.abs(roundDiff[0]) + ':' + Math.abs(roundDiff[1]) + ':'
-                + Math.abs(roundDiff[2]) + ':' + Math.abs(roundDiff[3])
+                + Math.abs(roundDiff[2]) + ':' + Math.abs(roundDiff[3]) + '0'
 
             timesUl.appendChild(li2);
+
         } else  {
 
-            li2.innerText = '⏲️' + ' ' + hRound + ':' + mRound + ':' + sRound + ':' + msRound
+            li2.innerText = '⏲️' + ' ' + hRound + ':' + mRound + ':' + sRound + ':' + msRound + '0'
             timesUl.appendChild(li2);
         }
     }
+
 })
