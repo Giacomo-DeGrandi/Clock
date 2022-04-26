@@ -18,23 +18,28 @@ main {
     overflow: hidden;
 }
 
+body {
+    background-color: var(--bkfogra)!important;
+}
 
 #timer {
     border-radius:1vh!important;
 }
 
-input {
-    background-color: var(--raisin)!important;
-    border: solid 1px whitesmoke;
+input,textarea {
+    background-color: var(--coffee)!important;
     color: ghostwhite!important;
+    border:none!important;
 }
 
 .bg-eerie {
     background-color:var(--eerie)!important;
 }
-
-body {
-    background-color: var(--bkfogra)!important;
+.bg-raisin {
+    background-color:var(--raisin)!important;
+}
+.bg-coffee {
+    background-color:var(--coffee)!important;
 }
 
 .btn-circle {

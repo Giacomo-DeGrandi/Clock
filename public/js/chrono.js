@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         roundCounter ++;
 
         let li = document.createElement('li');
-        li.setAttribute('class','p-2 h3 fw-lighter w-100');
+        li.setAttribute('class','p-1 h4 text-center fw-lighter');
 
         // get my hrs min secs
         let hRound = parseInt(cHou.innerHTML)
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         let li2 = document.createElement('li');
-        li2.setAttribute('class','p-2 h3 fw-lighter w-100');
+        li2.setAttribute('class','p-1 h4 text-center fw-lighter');
 
         // first Round is always NaN
         if(roundCounter > 1){

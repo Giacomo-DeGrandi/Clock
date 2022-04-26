@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function(){
 //---------  TIMER  ------------------------------------------------!!!!
 
     // get my divs
-    let timerDiv = document.querySelector("#timer > div")
     let tHou = document.querySelector("#tHou")
     let tMin = document.querySelector("#tMin")
     let tSec = document.querySelector("#tSec")
@@ -157,18 +156,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
             start.style.pointerEvents = "none";
 
-            let date = new Date()
-            let year = date.getFullYear()
-            let month = date.getMonth()
-            let day =  date.getDate()
-            let msec =  date.getMilliseconds()
-
             let tH = parseInt(tHou.innerHTML)
             let tM = parseInt(tMin.innerHTML)
             let tS = parseInt(tSec.innerHTML)
 
-            let myDate = [year, month, day, tH, tM, tS, msec]
-            let nuDate = new Date(...myDate);
             tS -= 1;
             tSec.innerText = tS.toString()
 
@@ -196,7 +187,6 @@ document.addEventListener('DOMContentLoaded', function(){
             }
 
         }
-
         clockInt = setInterval(countNow, 1000);
     }
 
