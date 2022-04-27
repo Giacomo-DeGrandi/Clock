@@ -35,6 +35,13 @@ document.addEventListener('DOMContentLoaded', function() {
     let sIn = document.querySelector("#Alarm > tbody > tr > td > div > input:nth-child(5)")
     let text = document.querySelector("#Alarm > tbody > tr > td > textarea");
 
+    hIn.setAttribute( "max" ,'23');
+    hIn.setAttribute( "min" ,'0');
+    mIn.setAttribute( "max" ,'59');
+    mIn.setAttribute( "min" ,'0');
+    sIn.setAttribute( "max" ,'59');
+    sIn.setAttribute( "min" ,'0');
+
     // submit button
     let send = document.querySelector("#Alarm > tbody > tr > td > button")
 
@@ -133,24 +140,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 if (validateText(text.value)) {
 
+                    
+                    // select table
+                    let myTable = document.querySelector("#myFutTable")
 
-                    /// futures alarms
-                    let futUl = document.querySelector("#nextList")
+                    // create a row to store the date selected
+                    let newTr = document.createElement('tr')
 
-                    let liFut = document.createElement('li');
-                    liFut.setAttribute('class', 'p-1 h5  shadow border-0 rounded-2 text-center fw-lighter');
+                    myTable.insertBefore(newTr, document.querySelector('#myFutTable > tr'))
 
-                    liFut.innerHTML = nowY + '-' + (nowMo+1) + '-' + nowD + ' ' +dat1.toLocaleTimeString('it-IT')
+                    let tdSel = document.createElement('td')
+
+                    tdSel.setAttribute('class', 'p-1 h5 shadow border-0 rounded-2 text-center fw-lighter');
+
+                    tdSel.innerHTML = nowY + '-' + (nowMo+1) + '-' + nowD + ' ' + dat1.toLocaleTimeString('it-IT')
 
                     console.log(dat1.toLocaleTimeString('it-IT'))
 
-                    liFut.innerHTML = '⏰' + liFut.innerHTML+ ' ' + '📄:' + text.value
-                    futUl.insertBefore(liFut,futUl.firstChild);
+                    tdSel.innerHTML = '⏰' + tdSel.innerHTML + ' ' + '📄:' + text.value
+                    newTr.append(tdSel);
 
-                    let diffUl = document.querySelector("#countList")
-
-                    let liDiff = document.createElement('li');
-                    liDiff.setAttribute('class', 'p-1 h5 shadow border-0 rounded-2 text-center fw-lighter');
+                    let tdDiff = document.createElement('td');
+                    tdDiff.setAttribute('class', 'p-1 h5 shadow border-0 rounded-2 text-center fw-lighter');
 
                     // substract date
                     let differ = dat1 - now
@@ -160,14 +171,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     //if(dateDiff.getHours() > 0){ dateDiff.setHours(0) }
                     dateDiff.setHours(dateDiff.getHours() - 1)
                     if(dateDiff.getHours() === 12){ dateDiff.setHours(0) }
-                    liDiff.innerHTML = '⌛' + dateDiff.toLocaleTimeString('it-IT')
-                    diffUl.insertBefore(liDiff, diffUl.firstChild);
 
+                    tdDiff.innerHTML = '⌛' + dateDiff.toLocaleTimeString('it-IT')
+
+                    newTr.append(tdDiff);
+
+                    // SEND date selected TO BD ------->
                     fetch('php/end.php', {
                         method: 'POST',
                         body: formData,
                     }).then(response => response.json())
-                        .then(data =>{
+                        .then(data =>{     //  <------ data
+                            console.log(data)
                         })
 
                 }
@@ -180,198 +195,222 @@ document.addEventListener('DOMContentLoaded', function() {
 
     }
 
+    // ___ get dates to show __________________________________________________________________//
+
+    // set a new form data object for the body
     let passData = new FormData();
 
-    passData.append('passed','true');
+    // set the Datas to send
+    passData.append('all','true');
 
+    // ask bd PASSED dates ---------------->
     fetch('php/gettime.php', {
         method: 'POST',
         body: passData,
     }).then(response => response.json())
-        .then(data => {
-            /// passed alarms
-            for(let i=0;i<data.length;i++){
-                let passUl = document.querySelector("#passList")
-                let liPass = document.createElement('li');
-                liPass.setAttribute('class', 'p-1 col h5  shadow border-0 rounded-2 text-center fw-lighter');
+        .then(data => {      //  <--------- data
 
-                let myPassDate = data[i].time
+            console.log(data)
 
-                liPass.innerHTML = '⏰' + myPassDate + ' ' + '📄:'+data[i].text
-                passUl.insertBefore(liPass,passUl.firstChild);
-            }
+            for (let i = 0; i <= data.length; i++) {
+
+                // select table
+                let myFutureTable = document.querySelector("#myFutTable")
+                let myPassedTable = document.querySelector("#myPassedTable")
+
+                //create row
+                let rowsFut = document.createElement('tr')
+                let rowsPass = document.createElement('tr')
+                //myTable.appendChild(rows)
+
+                // cells for passed
+                let tdPass = document.createElement('td');
+                tdPass.setAttribute('class', 'p-1 col h5  shadow border-0 rounded-2 text-center fw-lighter');
+
+                //create a td to store futures ------>
+                let tdFut = document.createElement('td');
+                tdFut.setAttribute('class', 'p-1 col h5 shadow border-0 rounded-2 text-center fw-lighter');
+
+
+                let now = new Date()
+                let date = new Date(data[i].time)
+
+
+                if (now > date) {
+
+                    myPassedTable.appendChild(rowsPass)
+
+                    let myPassDate = data[i].time
+
+                    tdPass.innerHTML = '⏰' + myPassDate + ' ' + '📄:' + data[i].text
+                    rowsPass.appendChild(tdPass);
+
+
+                } else if (now < date) {
+
+                    myFutureTable.appendChild(rowsFut)
+
+                    let myFutureDate = data[i].time
+
+                    // store the printed date in td nexta
+                    tdFut.innerHTML = '⏰' + myFutureDate + ' ' + '📄:' + data[i].text
+                    // append to tr
+                    rowsFut.append(tdFut);
+
+                    //create a td to store futures ------>
+                    let tdDiff = document.createElement('td');
+
+                    tdDiff.setAttribute('class', 'p-1 col h5 shadow border-0 rounded-2 text-center fw-lighter');
+
+                    let myDatesDiff = date - now
+
+                    let dateDifference = new Date(myDatesDiff)
+
+
+                    // here I couldn't understand why, but when the
+                    // hours difference is less than an hour it marks 12
+                    // instead of 00.  I had to add this conversion
+                    dateDifference.setHours(dateDifference.getHours() - 1)
+                    if (dateDifference.getHours() === 12) {
+                        dateDifference.setHours(0)
+                    }
+                    let y = now.getFullYear()
+                    let mo = now.getMonth()
+                    let da = now.getDate()
+                    dateDifference.setFullYear(y)
+                    dateDifference.setMonth(mo)
+                    dateDifference.setMonth(da)
+
+                    let h = dateDifference.getHours()
+                    let m = dateDifference.getMinutes()
+                    let s = dateDifference.getSeconds()
+
+                    // store the printed date in td nexta
+                    tdDiff.innerHTML = '⌛' + h + ':' + m + ':' + s
+                    // append to tr
+                    rowsFut.appendChild(tdDiff);
+
+                }
+
+
+            }           // <---- for loop for table
+
         })
 
-    let futData = new FormData();
+        function myCheckAlarm() {
 
-    futData.append('futures','true');
+            let testFutTd = document.querySelector("#myFutTable > tr:nth-child(2) > td:nth-child(1)")
+            let testFutTdTime = document.querySelector("#myFutTable > tr:nth-child(2) > td:nth-child(2)")
 
-    fetch('php/getfutures.php', {
-        method: 'POST',
-        body: futData,
-    }).then(response => response.json())
-        .then(data => {
+            let curDateToTest = new Date();
 
-            /// futures alarms
-            for(let i=0;i<data.length;i++){
+            let testFutTdText  = testFutTd.innerText.substring(1);
+            testFutTdText  = testFutTdText.substring(0,19);
 
-                let dateTestFut = new Date()
+            let dateToTest = new Date(testFutTdText)
 
-                let dTestFu = new Date(data[i].time)
-
-                let nowDiff = dTestFu - dateTestFut
-                let aDate = new Date(nowDiff)
-
-                aDate.setHours(aDate.getHours() - 1)
-                if(aDate.getHours() === 12){ aDate.setHours(0) }
+            let dtth = dateToTest.getHours()
+            let dttm = dateToTest.getMinutes()
+            let dtts = dateToTest.getSeconds()
+            let cdth = curDateToTest.getHours()
+            let cdtm = curDateToTest.getMinutes()
+            let cdts = curDateToTest.getSeconds()
 
 
-                let liDateDiff = document.createElement('li');
-                liDateDiff.setAttribute('class', 'p-1 col h5 shadow text-nowrap border-0 rounded-2 text-center fw-lighter');
+            if(dtth === cdth && dttm === cdtm && dtts === cdts){
 
-                liDateDiff.innerHTML = '⌛' +  ' ' + aDate.toLocaleTimeString('it-IT')
-                let diffUl = document.querySelector("#countList")
-                diffUl.appendChild(liDateDiff);
+                // select passed table
+                let myPassedTable = document.querySelector("#myPassedTable")
+                // create a row
+                let rowsPass = document.createElement('tr')
 
-                let futuresUl = document.querySelector("#nextList")
-                let liFutu = document.createElement('li');
-                liFutu.setAttribute('class', 'p-1 col h5 shadow border-0 rounded-2 text-center fw-lighter');
+                // append row
+                myPassedTable.appendChild(rowsPass)
 
-                let myFutureDate = data[i].time
-                let datedeb  = new Date(myFutureDate)
+                // cells for passed
+                let tdPass = document.createElement('td');
+                tdPass.setAttribute('class', 'p-1 col h5  shadow border-0 rounded-2 text-center fw-lighter');
 
-                liFutu.innerHTML = '⏰' + myFutureDate + ' ' + '📄:'+ data[i].text
-                futuresUl.appendChild(liFutu);
+                // swap value
+                tdPass.innerText = testFutTd.innerText
+
+                // remove from future list
+                testFutTd.remove()
+                testFutTdTime.remove()
+
+                // append cell
+                rowsPass.appendChild(tdPass);
+
+                // ___ALERT __________//
+
+                let alarmAlert = document.querySelector("#alarmAlert")
+                alarmAlert.innerText = testFutTd.innerText
             }
+        }
 
+        let check = setInterval(myCheckAlarm, 1000);
 
-        })
+        if(check++ ){
+            function alertNow(){
+
+                let alarmAlert = document.querySelector("#alarmAlert")
+                alarmAlert.remove()
+            }
+            let als = setInterval(alertNow, 1000);
+
+            if(als === 5){
+                clearInterval(als)
+            }
+        }
 
 })
-
-function myCheckAlarm() {
-
-    let futuresLi = document.querySelector("#nextList > li")
-    let myText = futuresLi.innerHTML.substring(20)
-
-    let dToC  = futuresLi.innerHTML.substring(1);
-
-    dToC =  dToC.substring(0,19)
-
-    let curDateToTest = new Date();
-    let dateToTest = new Date(dToC)
-
-    dateToTest = dateToTest.toLocaleTimeString('it-IT')
-    curDateToTest = curDateToTest.toLocaleTimeString('it-IT')
-
-
-    if( dateToTest === curDateToTest){
-
-        let audio = new Audio('Flute.wav');
-        audio.play();
-
-        let dUl = document.querySelector("#countList > li")
-        dUl.innerHTML = ''
-        futuresLi.innerHTML = ''
-        let passedUl = document.querySelector("#passList")
-        let liPassed = document.createElement('li');
-        liPassed.setAttribute('class', 'p-1 col h5  shadow border-0 rounded-2 text-center fw-lighter');
-
-        let tDates = new Date
-        let nowY = tDates.getFullYear()
-        let nowMo = tDates.getMonth()
-        let nowD = tDates.getDate()
-
-        liPassed.innerHTML = '⏰'+ nowY + '-' + nowMo + '-' + nowD + ' ' + dateToTest + ' ' + '📄:'+ myText
-        passedUl.insertBefore(liPassed,passedUl.firstChild);
-
-    }
-
-}
-
-let check = setInterval(myCheckAlarm, 1000);
-
-
 
 /*
 
 
+            // check if time s up
+            function myCheckAlarm() {
 
-                    //-----> fetch
-                    fetch('php/end.php', {
-                        method: 'POST',
-                        body: formData,
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            let infos = data
-                            let passed = infos[0]
-                            let text = infos[1]
-                            let id = infos[2]
+                let futuresLi = document.querySelector("#nextList > li")
+                let myText = futuresLi.innerHTML.substring(20)
 
-                            console.log(passed)
+                let dToC  = futuresLi.innerText.substring(1);
 
-                            let unPass = [...new Set(passed)];
-                            let unText = [...new Set(text)];
+                dToC =  dToC.substring(0,19)
 
-                            console.log(unPass)
-                            for (let p = 0; p < unPass.length; p++) {
+                let curDateToTest = new Date();
+                let dateToTest = new Date(dToC)
 
-                                let liPass = document.createElement('li');
-                                liPass.setAttribute('class', 'p-1 h4 shadow border border-0 rounded-2 text-center fw-lighter');
-                                liPass.innerHTML = JSON.stringify(unPass[p].date);
-                                liPass.innerHTML = '⏰: ' + liPass.innerHTML.substring(0, 20) + ' ' + '📄:'+ unText[p].value
-                                passUl.appendChild(liPass);
-                            }
-
-                            /*
-                            for (let d = 0; d < diff.length; d++) {
-                                let liDiff = document.createElement('li');
-                                liDiff.setAttribute('class', 'p-1 h4 shadow border-0 rounded-2 text-center fw-lighter');
-                                let diff2 = diff
-                                diff2 = diff[d].split(',')
-                                liDiff.innerHTML = diff2[0] + ':' + diff2[1] + ':' + diff2[2];
-                                liDiff.innerHTML = '⏰' + id[d] + '- ' + liDiff.innerHTML
-                                diffUl.appendChild(liDiff);
-                            }
-                            for (let t = 0; t < text.length; t++) {
-                                let liText = document.createElement('li');
-                                liText.setAttribute('class', 'p-1 h4  shadow border-0 rounded-2 text-center fw-lighter');
-                                liText.innerHTML = text[t];
-                                liText.innerHTML = '⏰' + id[t] + ': ' + liText.innerHTML
-                                textUl.appendChild(liText);
-                            }
+                dateToTest = dateToTest.toLocaleTimeString('it-IT')
+                curDateToTest = curDateToTest.toLocaleTimeString('it-IT')
 
 
+                if( dateToTest === curDateToTest){
 
+                    let dUl = document.querySelector("#countList > li")
+                    dUl.innerHTML = ''
+                    futuresLi.innerHTML = ''
+                    let alarmAlert = document.querySelector("#alarmAlert");
+                    alarmAlert.innerText = myText
+                    let passedUl = document.querySelector("#passList")
+                    let liPassed = document.createElement('li');
+                    liPassed.setAttribute('class', 'p-1 col h5  shadow border-0 rounded-2 text-center fw-lighter');
 
+                    let tDates = new Date
+                    let nowY = tDates.getFullYear()
+                    let nowMo = tDates.getMonth()
+                    let nowD = tDates.getDate()
 
+                    liPassed.innerHTML = '⏰'+ nowY + '-' + nowMo + '-' + nowD + ' ' + dateToTest + ' ' + myText
+                    passedUl.insertBefore(liPassed,passedUl.firstChild);
 
+                }
 
-                .then(data => {
-                    let w = data
-                    console.log(w)
-                    console.log(typeof(w))
-
-                    // do something with your data
-                })
-
-
-            async function fetchDate() {
-                const settings = {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: formData
-                };
-                const response = await fetch('php/end.php', settings);
-                return await response.json();
             }
 
-            let allDate = fetchDate()
-            console.log(fetchDate)
-
+            let check = setInterval(myCheckAlarm, 1000);
 
  */
+
+
+

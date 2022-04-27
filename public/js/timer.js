@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', function(){
     let tMin = document.querySelector("#tMin")
     let tSec = document.querySelector("#tSec")
 
+    // Alert
+    let alertTimer = document.querySelector("#timerAlert")
+
+
     // initialise my timer
     let h = 0
     let m = 0
@@ -182,6 +186,7 @@ document.addEventListener('DOMContentLoaded', function(){
             if( tH === 0 && tM === 0 && tS === 0 ){
                 start.style.pointerEvents = "auto";
                 let audio = new Audio('Flute.wav');
+                alertTimer.innerHTML = 'Time\'s UP!!!!'
                 audio.play();
                 clearInterval(clockInt);
             }
