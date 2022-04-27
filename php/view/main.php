@@ -10,9 +10,10 @@
           rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
           crossorigin="anonymous">
     <script src="public/js/clock.js" type="application/javascript"></script>
-    <script async src="public/js/timer.js" type="application/javascript"></script>
+    <script src="public/js/timer.js" type="application/javascript"></script>
     <script src="public/js/chrono.js" type="application/javascript"></script>
     <script src="public/js/alarm.js" type="application/javascript"></script>
+    <script src="public/js/alarm2.js" type="application/javascript"></script>
     <title>CLOCK</title>
 </head>
 <body>

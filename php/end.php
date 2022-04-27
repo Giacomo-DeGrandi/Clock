@@ -33,5 +33,32 @@ if(isset($_POST['hour'])&&
 }
 
 
+/*
+$time = $alarm->getTime();
+
+// init pass/fut tables
+
+$passed = [];
+$futures = [];
+$text = [];
+$id = [];
+
+// init my date object for Now date and var for bdDate
+$dateNow = new DateTime();
+$dateBd='';
+
+// check if date is passed
+for($i=0;$i<=isset($time[$i]);$i++){
+    $dateBd = new DateTime($time[$i]['time']);
+    $id[] = $time[$i]['id'];
+    $text[] = $time[$i]['text'];
+    // if date now is minor than date in bd
+    if($dateNow > $dateBd) {// save them as passed
+        $passed[] = $dateBd;
+    }
+}
+
+*/
+
 
 

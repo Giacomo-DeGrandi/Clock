@@ -93,10 +93,6 @@ ob_start();
 
         </table>
 
-        <div class="d-flex flex-row text-center bg-eerie shadow-sm mt-2" id="timerAlert">
-
-        </div>
-
 
         <!--   CHRONO   -->
         <div class="display-1 bg-coffee p-1 w-100 shadow-sm fw-bolder text-center mt-3 rounded-1">
@@ -211,39 +207,41 @@ ob_start();
         <h4 class="text-white bg-eerie" id="alert"></h4>
 
 
+		<div class="d-flex flex-row text-center display-3 bg-eerie shadow-sm mt-2" id="alarmAlert">
+
+        </div>
+		
         <!-- ALARMS DASHBOARD  -->
-        <div class="row text-center bg-eerie shadow-sm mt-2" >
+        <div class="d-flex flex-row text-center bg-eerie shadow-sm mt-2">
 
-            <table id="myFutTable" class="p-2 bg-coffee mt-1">
-                <tr>
-                    <th id="nexta">
-                        <h3 class="p-2 mx-2 text-nowrap text-info">
-                            Futures
-                        </h3>
-                    </th>
-                    <th id="timetoa">
-                        <h3 class="p-2 mx-2 text-warning">
-                            Time To
-                        </h3>
-                    </th>
-                </tr>
-            </table>
+            <div class="p-2 bg-coffee mt-1">
+                <h3 class="p-2 mx-2 text-nowrap text-warning">Time To</h3>
+                <ul id="countList" class="text-center">
 
-            <table class="p-2 bg-coffee mt-1" id="myPassedTable">
-                <tr>
-                    <th id="passeda">
-                        <h3 class="p-2 text-danger" >
-                            Passed
-                        </h3>
-                    </th>
-                </tr>
-            </table>
+                </ul>
+            </div>
 
-        </div>
+            <div class="p-2 bg-coffee mt-1">
+                <h3 class="p-2 mx-2 text-info">Next</h3>
+                <ul id="nextList" class="text-center">
+					<li id="firstFutLi">
+						
+					</li>
+					<li id="secondFutLi">
+						
+					</li>
+                </ul>
+            </div>
 
-        <div class="d-flex flex-row display-5 text-center bg-eerie shadow-sm mt-2" id="alarmAlert">
+            <div class="p-2 bg-coffee mt-1">
+                <h3 class="p-2 text-danger">Passed</h3>
+                <ul id="passList" class="text-center">
+
+                </ul>
+            </div>
 
         </div>
+
 
     </div>
 
