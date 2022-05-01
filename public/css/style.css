@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,400;0,500;0,700;0,800;0,900;1,100&family=Space+Grotesk:wght@300;500;700&display=swap');
+
+:root {
+    --grotesk : 'Space Grotesk', sans-serif;
+    --bkfogra : #080708;
+    --eerie : #161316;
+    --raisin : #211C21;
+    --coffee : #372F37;
+}
+
+*{
+    font-family:var(--grotesk)!important;
+    color:white;
+}
+
+main {
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    background-color: var(--bkfogra)!important;
+}
+
+#timer {
+    border-radius:1vh!important;
+}
+
+input,textarea {
+    background-color: var(--coffee)!important;
+    color: ghostwhite!important;
+    border:none!important;
+}
+
+.bg-eerie {
+    background-color:var(--eerie)!important;
+}
+.bg-raisin {
+    background-color:var(--raisin)!important;
+}
+.bg-coffee {
+    background-color:var(--coffee)!important;
+}
+
+.btn-circle {
+    border-radius: 18px!important;
+}
+
+ul{
+    list-style: none!important;
+}
