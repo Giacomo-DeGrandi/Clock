@@ -13,7 +13,6 @@
     <script src="public/js/timer.js" type="application/javascript"></script>
     <script src="public/js/chrono.js" type="application/javascript"></script>
     <script src="public/js/alarm.js" type="application/javascript"></script>
-    <script src="public/js/alarm2.js" type="application/javascript"></script>
     <title>CLOCK</title>
 </head>
 <body>

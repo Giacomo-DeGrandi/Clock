@@ -14,18 +14,22 @@ Class Alarm extends Model {
     public function getTime(){
         // select only passed
 		$tods  = getdate();
-        $datenow = $tods['year'].'-'.$tods['mon'].'-'.$tods['mday'].' '.$tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
-        $sql = "SELECT * FROM alarms WHERE time < '.$datenow.' ORDER BY id DESC";
-        $r = $this->selectQuery($sql);
+        $datenow = $tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
+		$datenow = date_create($datenow)->format('H:i:s');
+        $sql = "SELECT id,time,text FROM alarms WHERE time < :time ORDER BY id DESC";
+		$p = ([':time' => $datenow ]);
+        $r = $this->selectQuery($sql,$p);
         $r = $r->fetchAll();
         return $r;
     }
     public function getFutures(){
         // select only passed
 		$tods  = getdate();
-        $datenow = $tods['year'].'-'.$tods['mon'].'-'.$tods['mday'].' '.$tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
-        $sql = "SELECT * FROM alarms WHERE time > '.$datenow.' ORDER BY time ASC";
-        $r = $this->selectQuery($sql);
+        $datenow = $tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
+        $datenow = date_create($datenow)->format('H:i:s');
+		$sql = "SELECT id,time,text FROM alarms WHERE time > :time ORDER BY time ASC";
+		$p = ([':time' => $datenow ]);
+        $r = $this->selectQuery($sql,$p);
         $r = $r->fetchAll();
         return $r;
     }
