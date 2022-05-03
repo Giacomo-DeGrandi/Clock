@@ -205,11 +205,17 @@ ob_start();
         </table>
 
         <h4 class="text-white bg-eerie" id="alert"></h4>
-
-
+		
+		<form action="" method="POST" class="w-50">
+			<button type="submit" id="reset" class="btn text-center btn-outline-primary shadow-sm p-3 mt-2" name="reset" value="+">
+				reset
+			</button>
+		</form>
 		<div class="d-flex flex-row text-center display-3 bg-eerie shadow-sm mt-2" id="alarmAlert">
 
         </div>
+
+		
 		
         <!-- ALARMS DASHBOARD  -->
         <div class="d-flex flex-row text-center bg-eerie shadow-sm mt-2">
@@ -224,12 +230,6 @@ ob_start();
             <div class="p-2 bg-coffee mt-1">
                 <h3 class="p-2 mx-2 text-info">Next</h3>
                 <ul id="nextList" class="text-center">
-					<li id="firstFutLi">
-						
-					</li>
-					<li id="secondFutLi">
-						
-					</li>
                 </ul>
             </div>
 
@@ -241,6 +241,7 @@ ob_start();
             </div>
 
         </div>
+		
 
     </div>
 

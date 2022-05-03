@@ -32,6 +32,10 @@ if(isset($_POST['hour'])&&
     print_r(json_encode('setted'));
 }
 
+if(isset($_POST['end'])){
+	print_r(json_encode('end'));
+}
+
 
 /*
 $time = $alarm->getTime();

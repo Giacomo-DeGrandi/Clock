@@ -7,17 +7,24 @@ document.addEventListener('DOMContentLoaded', function() {
 	
 	// function to translate ms
 	
-	function msToTime(duration) {
-	  let milliseconds = Math.floor((duration % 1000) / 100),
-	  	seconds = Math.floor((duration / 1000) % 60),
-		minutes = Math.floor((duration / (1000 * 60)) % 60),
-		hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
 
-		hours = (hours < 10) ? "0" + hours : hours;
-		minutes = (minutes < 10) ? "0" + minutes : minutes;
-		seconds = (seconds < 10) ? "0" + seconds : seconds;
+	
+	function msToTime(s) {
 
-		return hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+	  // Pad to 2 or 3 digits, default is 2
+	  function pad(n, z) {
+		z = z || 2;
+		return ('00' + n).slice(-z);
+	  }
+
+	  var ms = s % 1000;
+	  s = (s - ms) / 1000;
+	  var secs = s % 60;
+	  s = (s - secs) / 60;
+	  var mins = s % 60;
+	  var hrs = (s - mins) / 60;
+
+	  return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) ;
 	}
 
 
@@ -63,27 +70,36 @@ document.addEventListener('DOMContentLoaded', function() {
     // alert space on Alarm
     let alert = document.querySelector("#alert");
 
+	let reset = document.querySelector("#reset")
+	reset.style.display = "none";
 	
-	
+	let testDate2 = new Date()	
+	let nowH = testDate2.getHours()
+    let nowM = testDate2.getMinutes()
+    let nowS = testDate2.getSeconds()
+	let nowY = testDate2.getFullYear()
+    let nowMo = testDate2.getMonth()
+    let nowD = testDate2.getDate()
+
+    let now = new Date(nowY, nowMo, nowD, nowH, nowM, nowS, 0)
+
     // add event listener
-    send.addEventListener('click', sendIns)
-
-    let counterBtn = 0;
-
-    function sendIns() {
+    send.addEventListener('click', function (event) {
 		
-		// init lists
 		
-		let passUl = document.querySelector("#passList")
+		let dli = document.querySelector("#countList > li:nth-child(1)")
+		let lui = document.querySelector("#nextList > li:nth-child(1)")
 		let futuresUl = document.querySelector("#nextList")
+		let passUl = document.querySelector("#passList")
 		let diffUl = document.querySelector("#countList")
+		
+		// init lists	
 		passUl.innerHTML = ''
 		futuresUl.innerHTML = ''
 		diffUl.innerHTML = ''
 
-
         alert.innerHTML = ''
-
+		
         hIn.addEventListener('input', setHour)
         mIn.addEventListener('input', setMin)
         sIn.addEventListener('input', setSec)
@@ -105,8 +121,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return e.target.value
         }
 
-        let testDate = new Date()
-
         // set a new FormData object to set the POST
         let formData = new FormData();
 
@@ -127,72 +141,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 return text;
             }
         } */
+		
+		if(hIn.value===undefined){hIn.value=0}
+		if(mIn.value===undefined){mIn.value=0}
+		if(sIn.value===undefined){sIn.value=0}
+		(hIn.value.toString().length < 2) ? hIn.value = '0' + hIn.value.toString() : hIn.value = hIn.value.toString();
+        (mIn.value.toString().length < 2) ? mIn.value = '0' + mIn.value.toString() : mIn.value = mIn.value.toString();
+        (sIn.value.toString().length < 2) ? sIn.value = '0' + sIn.value.toString() : sIn.value = sIn.value.toString();
+		let stringDates = hIn.value +':'+ mIn.value +':'+ sIn.value
+		let valData = stringDates.match(/(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)/gm);
+		console.log(valData)
 
-        // validate time inputs
-        function valHour(hour) {
-            if (hour === undefined) {
-                hour = 0
-            }
-            return !(hour > 23 || hour < 0);
-        }
-
-        function valMin(min) {
-            if (min === undefined) {
-                min = 0
-            }
-            return !(min > 59 || min < 0);
-        }
-
-        function valSec(sec) {
-            if (sec === undefined) {
-                sec = 0
-            }
-            return !(sec > 59 || sec < 0);
-        }
-
-        let nowH = testDate.getHours()
-        let nowM = testDate.getMinutes()
-        let nowS = testDate.getSeconds()
-		let nowY = testDate.getFullYear()
-        let nowMo = testDate.getMonth()
-        let nowD = testDate.getDate()
-
-        let now = new Date(nowY, nowMo, nowD, nowH, nowM, nowS, 0)
         let dat1 = new Date(nowY, nowMo, nowD, hIn.value, mIn.value, sIn.value, 0)
 		
 		
         if (dat1 > now) {
-            if (valHour(parseInt(hIn.value)) === true &&
-                valMin(parseInt(mIn.value)) === true &&
-                valSec(parseInt(sIn.value)) === true) {
-
-              		// if (validateText(text.value)) {
-				/*
-                    /// futures alarms
-                    let futUl = document.querySelector("#nextList")
-					
-					let firstFutLi = document.querySelector("#firstFutLi")
-					firstFutLi.setAttribute('class', 'p-1 h5  shadow border-0 rounded-2 text-center fw-lighter');	
-
-                    firstFutLi.innerHTML = dat1.toLocaleTimeString('it-IT')
-
-                    console.log(dat1.toLocaleTimeString('it-IT'))
-
-                    firstFutLi.innerHTML = '⏰' + firstFutLi.innerHTML + ' ' + '📄:' + text.value
-					
-					futUl.prepend(firstFutLi);
-								
-                    let diffUl = document.querySelector("#countList")
-
-                    let liDiff = document.createElement('li');
-                    liDiff.setAttribute('class', 'p-1 h5 shadow border-0 rounded-2 text-center fw-lighter');
-
-                    // substract date
-                    let differ = dat1 - now
-
-                    liDiff.innerHTML = '⌛' + msToTime(differ)
-                    diffUl.insertBefore(liDiff, diffUl.firstChild);
-				*/
+            if (valData) {
 
                     fetch('php/end.php', {
                         method: 'POST',
@@ -200,7 +164,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
 					.then(response => response.json())
                     .then(data =>{
-						
 						let passData = new FormData();
 
 						passData.append('passed','true');
@@ -208,142 +171,119 @@ document.addEventListener('DOMContentLoaded', function() {
 						return fetch('php/gettime.php', {
 							method: 'POST',
 							body: passData,
-						})
+						})						
 					})
 					.then(response => response.json())
-				    .then(data => {
-					console.log(data)
-            		// passed alarms
-						for(let i=0;i<data.length;i++){
-							let passUl = document.querySelector("#passList")
-							let liPass = document.createElement('li');
-							liPass.setAttribute('class', 'p-1 col h5  shadow border-0 rounded-2 text-center fw-lighter');
+					.then(data => {	
+						console.log(data)
+						console.log('<-passed')
 
-							console.log('pass')
-							console.log(data[i].id)
-							let myPassDate = data[i].time
-							liPass.innerHTML = '🆔'+ data[i].id +' ⏰' + myPassDate + ' ' + '📄:'+data[i].text
-							passUl.insertBefore(liPass,passUl.firstChild);
-						}
-						
-						let futData = new FormData();
+							// passed alarms
+							for(let i=0;i<data.length;i++){
+								let liPass = document.createElement('li');
+								liPass.setAttribute('class', 'p-1 col h5  shadow border-0 rounded-2 text-center fw-lighter');
+								let myPassDate = data[i].time
+								liPass.innerText = '🆔'+ data[i].id +' ⏰' + myPassDate + ' ' + '📄:'+data[i].text
+								passUl.insertBefore(liPass,passUl.firstChild);
+							}
 
-						futData.append('futures','true');
+							let futData = new FormData();
 
-						 return fetch('php/getfutures.php', {
-							method: 'POST',
-							body: futData,
-						})
+							futData.append('futures','true');
+
+							return fetch('php/getfutures.php', {
+								method: 'POST',
+								body: futData,
+							})
 					})
 					.then(response => response.json())
 					.then(data => {
+							console.log(data)
+							for(let i=0;i<data.length;i++){
 
-						for(let i=0;i<data.length;i++){
+								let liFutu = document.createElement('li');
+								liFutu.setAttribute('class', 'p-1 col h5 shadow border-0 rounded-2 text-center fw-lighter');
 
-							let futuresUl = document.querySelector("#nextList")
-							let liFutu = document.createElement('li');
-							liFutu.setAttribute('class', 'p-1 col h5 shadow border-0 rounded-2 text-center fw-lighter');
+								console.log(data[i].time)
+								let efDate = data[i].time.split(':')
 
-							let efDate = data[i].time.split(':')
-							console.log('futu')
-							console.log(efDate[0])
-							console.log(efDate[1])
-							console.log(efDate[2])
-							let testNowDate = new Date()
-							let testFutDate = new Date()
-							testFutDate.setHours(efDate[0])
-							testFutDate.setMinutes(efDate[1])
-							testFutDate.setSeconds(efDate[2])
+								let testNowDate = new Date()
+								let testFutDate = new Date()
+								testFutDate.setHours(parseInt(efDate[0]))
+								testFutDate.setMinutes(parseInt(efDate[1]))
+								testFutDate.setSeconds(parseInt(efDate[2]))
 
-							let defDate = testFutDate - testNowDate 
+								let defDate = testFutDate - testNowDate 
 
-							console.log(msToTime(defDate))
+								let liDateDiff = document.createElement('li');
+								liDateDiff.setAttribute('class', 'p-1 col h5 shadow text-nowrap border-0 rounded-2 text-center fw-lighter');
 
-							let liDateDiff = document.createElement('li');
-							liDateDiff.setAttribute('class', 'p-1 col h5 shadow text-nowrap border-0 rounded-2 text-center fw-lighter');
-
-							testFutDate = testFutDate.toLocaleTimeString('it-IT')
-							liFutu.innerHTML = '🆔'+ data[i].id +' ⏰' + testFutDate + ' ' + '📄:'+ data[i].text
-							futuresUl.appendChild(liFutu); 
-
-							liDateDiff.innerHTML = '🆔'+ data[i].id +'⌛' +  ' ' + msToTime(defDate)
-							let diffUl = document.querySelector("#countList")
-							diffUl.appendChild(liDateDiff);
-
-						}
-
-					})
-				
-					
-						function myCheckAlarm() {
-
-							let futuresLi = document.querySelector("#nextList > li")
-							let myText = futuresLi.innerHTML.substring(14)
-							
-							let dToC  = futuresLi.innerText.substring(6);
-							
-							console.log(myText)
-
-							dToC =  dToC.substring(0,9)
-							console.log(dToC)
-							
-							console.log(dToC)
-							let dTo = dToC.split(':')
-
-							let curDateToTest = new Date();
-							let dateToTest = new Date()
-							
-							dateToTest.setHours(dTo[0])
-							dateToTest.setMinutes(dTo[1])
-							dateToTest.setSeconds(dTo[2])
-														
-							console.log(dTo[0])
-
-							dateToTest = dateToTest.toLocaleTimeString('it-IT')
-							curDateToTest = curDateToTest.toLocaleTimeString('it-IT')
-
-							console.log(curDateToTest)
-							console.log(dateToTest)
-
-							if( dateToTest === curDateToTest){
-
-								let dUl = document.querySelector("#countList > li")
-								dUl.remove()
-								futuresLi.remove()
-								let alarmAlert = document.querySelector("#alarmAlert");
-								alarmAlert.innerText = myText
-								let passedUl = document.querySelector("#passList")
-								let liPassed = document.createElement('li');
-								liPassed.setAttribute('class', 'p-1 col h5  shadow border-0 rounded-2 text-center fw-lighter');
-
-								let tDates = new Date
-								let nowY = tDates.getFullYear()
-								let nowMo = tDates.getMonth()
-								let nowD = tDates.getDate()
-
-								liPassed.innerHTML = '⏰'+ dateToTest + ' ' + myText
-								passedUl.insertBefore(liPassed,passedUl.firstChild);
-								let audio = new Audio('public/js/Flute.wav');
-								audio.play();
+								testFutDate = testFutDate.toLocaleTimeString('it-IT')
+								liFutu.innerText = '🆔'+ data[i].id +' ⏰' + testFutDate + ' ' + '📄:'+ data[i].text
+								lui = liFutu
+								futuresUl.appendChild(lui); 
+								liDateDiff.innerHTML = '🆔'+ data[i].id +'⌛' +  ' ' + msToTime(defDate)
+								dli = liDateDiff
+								diffUl.appendChild(dli);
 							}
 
-						}
+							function myCheckAlarm() {
 
-						let check = setInterval(myCheckAlarm, 1000);
-						
-	
+								let dli2 = document.querySelector("#countList > li:nth-child(1)")
+								let lui2 = document.querySelector("#nextList > li:nth-child(1)")
 
-            } else {
-                alert.innerHTML = 'wrong time format'
-            }
-        } else {
-            alert.innerHTML = 'You can\'t set an alarm in the past'
-        }
+								let myText = lui2.innerText.substring(14)
 
-    }
+								let dToC  = lui2.innerText;
 
+								var test = dToC.match(/(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)/gm);
+
+								let dTo = test[0].split(':')
+								console.log(dTo)
+
+								let curDateToTest = new Date();
+								let dateToTest = new Date()
+
+								dateToTest.setHours(parseInt(dTo[0]))
+								dateToTest.setMinutes(parseInt(dTo[1]))
+								dateToTest.setSeconds(parseInt(dTo[2]))
+
+								dateToTest = dateToTest.toLocaleTimeString('it-IT')
+								curDateToTest = curDateToTest.toLocaleTimeString('it-IT')
+
+								if( dateToTest === curDateToTest){
+
+									let alarmAlert = document.querySelector("#alarmAlert");
+									alarmAlert.innerText = myText
+									let liPassed = document.createElement('li');
+									liPassed.setAttribute('class', 'p-1 col h5  shadow border-0 rounded-2 text-center fw-lighter');
+
+									liPassed.innerHTML = '⏰'+ dateToTest + ' ' + myText
+									passUl.insertBefore(liPassed,passUl.firstChild);
+
+									let audio = new Audio('public/js/Flute.wav');
+									audio.play();
+									send.disabled = true;
+									reset.style.display = "block";
+									dli2.remove()
+									lui2.remove()
+								}
+							}
+							let check = setInterval(myCheckAlarm, 1000);
+				})
+								
+			} else {
+        		alert.innerHTML = 'wrong time format'
+    		}
+
+		} else {
+      		alert.innerHTML = 'You can\'t set an alarm in the past'
+   		}
+		
+	event.preventDefault();
+	}, false)	// <--- sendins
+		
 })
-
 
 
 

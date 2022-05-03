@@ -15,10 +15,12 @@ Class Alarm extends Model {
         // select only passed
 		$tods  = getdate();
         $datenow = $tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
-		$datenow = date_create($datenow)->format('H:i:s');
+		$startTime = new DateTime($datenow);
+		$startTime->modify('-5 seconds');
+		$datenow = $startTime->format('H:i:s');
         $sql = "SELECT id,time,text FROM alarms WHERE time < :time ORDER BY id DESC";
 		$p = ([':time' => $datenow ]);
-        $r = $this->selectQuery($sql,$p);
+        $r = $this->selectQuery($sql,$p);	//
         $r = $r->fetchAll();
         return $r;
     }
@@ -26,10 +28,12 @@ Class Alarm extends Model {
         // select only passed
 		$tods  = getdate();
         $datenow = $tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
-        $datenow = date_create($datenow)->format('H:i:s');
+		$startTime = new DateTime($datenow);
+		$startTime->modify('+20 seconds');
+		$datenow = $startTime->format('H:i:s');
 		$sql = "SELECT id,time,text FROM alarms WHERE time > :time ORDER BY time ASC";
 		$p = ([':time' => $datenow ]);
-        $r = $this->selectQuery($sql,$p);
+        $r = $this->selectQuery($sql,$p);	//,$p
         $r = $r->fetchAll();
         return $r;
     }
