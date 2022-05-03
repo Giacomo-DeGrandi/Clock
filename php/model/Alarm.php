@@ -37,8 +37,5 @@ Class Alarm extends Model {
         $r = $r->fetchAll();
         return $r;
     }
-    public function delete(){
-        $sql = "DELETE FROM alarms";
-        $r = $this->selectQuery($sql);
-    }
+
 }
