@@ -229,17 +229,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
 							function myCheckAlarm() {
 
-								let dli2 = document.querySelector("#countList > li:nth-child(1)")
-								let lui2 = document.querySelector("#nextList > li:nth-child(1)")
 
-								let myText = lui2.innerText.substring(14)
+
+								let dli2 = document.querySelector("#countList > li:nth-child(1)")
+								let lui2 = data[0].time
+								console.log(lui2)
 
 								let dToC  = lui2.innerText;
 
-								var test = dToC.match(/(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)/gm);
+								let test = dToC.match(/(?:[01]\d|2[0123]):(?:[012345]\d):(?:[012345]\d)/gm);
 
 								let dTo = test[0].split(':')
-								console.log(dTo)
 
 								let curDateToTest = new Date();
 								let dateToTest = new Date()

@@ -2,6 +2,9 @@
 
 require_once('Model.php');
 
+date_default_timezone_set("Europe/Paris");
+
+
 Class Alarm extends Model {
 
     function __construct(){}
@@ -14,10 +17,10 @@ Class Alarm extends Model {
     public function getTime(){
         // select only passed
 		$tods  = getdate();
-        $datenow = $tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
+        $datenow = $tods['year'].'-'.$tods['mon'].'-'.$tods['mday'].' '.$tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
 		$startTime = new DateTime($datenow);
 		$startTime->modify('-5 seconds');
-		$datenow = $startTime->format('H:i:s');
+		$datenow = $startTime->format('Y-m-d H:i:s');
         $sql = "SELECT id,time,text FROM alarms WHERE time < :time ORDER BY id DESC";
 		$p = ([':time' => $datenow ]);
         $r = $this->selectQuery($sql,$p);	//
@@ -27,10 +30,10 @@ Class Alarm extends Model {
     public function getFutures(){
         // select only passed
 		$tods  = getdate();
-        $datenow = $tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
+        $datenow = $tods['year'].'-'.$tods['mon'].'-'.$tods['mday'].' '.$tods['hours'].':'.$tods['minutes'].':'.$tods['seconds'];
 		$startTime = new DateTime($datenow);
 		$startTime->modify('+20 seconds');
-		$datenow = $startTime->format('H:i:s');
+		$datenow = $startTime->format('Y-m-d H:i:s');
 		$sql = "SELECT id,time,text FROM alarms WHERE time > :time ORDER BY time ASC";
 		$p = ([':time' => $datenow ]);
         $r = $this->selectQuery($sql,$p);	//,$p

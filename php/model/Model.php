@@ -6,10 +6,10 @@ Abstract Class Model{
 
     function connect(){
 
-        $server="localhost:3306";
-        $username="gidiclock";
-        $password="gidiclock";
-        $database="carlo-de-grandi-giacomo_clock";
+        $server="localhost";
+        $username="root";
+        $password="";
+        $database="clock";
 
         $dsn = "mysql:host=$server;dbname=$database;charset=UTF8";
         $this->conn = new PDO($dsn, $username, $password);
